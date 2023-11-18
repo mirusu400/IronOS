@@ -123,12 +123,12 @@ static void MX_ADC1_Init(void) {
 
   /**Configure the ADC multi-mode
    */
-  multimode.Mode = ADC_DUALMODE_REGSIMULT_INJECSIMULT;
+  multimode.Mode = ADC_MODE_INDEPENDENT;
   HAL_ADCEx_MultiModeConfigChannel(&hadc1, &multimode);
 
   /**Configure Regular Channel
    */
-  sConfig.SamplingTime = ADC_SAMPLETIME_239CYCLES_5;
+  sConfig.SamplingTime = ADC_SAMPLETIME_71CYCLES_5;
 
   sConfig.Channel = TMP36_ADC1_CHANNEL;
   sConfig.Rank    = ADC_REGULAR_RANK_1;

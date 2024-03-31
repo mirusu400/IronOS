@@ -46,7 +46,7 @@ endif
 
 # Defines for host tools
 ifeq ($(HOST_CC),)
-HOST_CC:=gcc
+HOST_CC:=gclang
 endif
 
 HOST_OUTPUT_DIR=Objects/host
@@ -104,11 +104,12 @@ DEV_GLOBAL_DEFS=-D STM32F103T8Ux       \
                 -D STM32F10X_MD        \
                 -finline-limit=9999999
 
-DEV_LDFLAGS=-Wl,--wrap=printf  -Wl,--no-wchar-size-warning
+DEV_LDFLAGS=-Wl,--wrap=printf  
 DEV_AFLAGS=
 DEV_CFLAGS=-D VECT_TAB_OFFSET=$(bootldr_size)U
 DEV_CXXFLAGS=
-CPUFLAGS=-mcpu=cortex-m3  \
+CPUFLAGS= \
+          -mcpu=cortex-m3 \
          -mthumb          \
          -mfloat-abi=soft
 
@@ -136,7 +137,8 @@ DEV_LDFLAGS=-Wl,--wrap=printf  -Wl,--no-wchar-size-warning
 DEV_AFLAGS=
 DEV_CFLAGS=-D VECT_TAB_OFFSET=$(bootldr_size)U
 DEV_CXXFLAGS=
-CPUFLAGS=-mcpu=cortex-m3  \
+CPUFLAGS= \
+          -mcpu=cortex-m3 \
          -mthumb          \
          -mfloat-abi=soft
 
@@ -170,7 +172,8 @@ DEV_LDFLAGS=
 DEV_AFLAGS=
 DEV_CFLAGS=-D VECT_TAB_OFFSET=$(bootldr_size)U
 DEV_CXXFLAGS=
-CPUFLAGS=-mcpu=cortex-m3 \
+CPUFLAGS= \
+          -mcpu=cortex-m3 \
          -mthumb         \
          -mfloat-abi=soft
 
@@ -331,15 +334,11 @@ S_SRCS:=$(shell find $(DEVICE_BSP_DIR) -type f -name '*.S')
 # Code optimisation ------------------------------------------------------------
 OPTIM=-Os                             \
       -fno-jump-tables                \
-      -foptimize-strlen               \
-      -faggressive-loop-optimizations \
-      -fdevirtualize-at-ltrans        \
       -fmerge-all-constants           \
       -fshort-wchar                   \
       -flto=auto                      \
       -finline-small-functions        \
       -finline-functions              \
-      -findirect-inlining             \
       -fdiagnostics-color             \
       -ffunction-sections             \
       -fdata-sections                 \
@@ -363,7 +362,7 @@ endif
 LIBS=
 
 # Compilers --------------------------------------------------------------------
-COMPILER=gcc
+COMPILER=gclang
 
 # arm-none-eabi is the general ARM compiler
 # riscv-none-embed is the riscv compiler
@@ -379,14 +378,21 @@ COMPILER_PREFIX=riscv-none-elf
 endif
 
 # Programs ---------------------------------------------------------------------
-CC=$(COMPILER_PREFIX)-gcc
-CPP=$(COMPILER_PREFIX)-g++
-OBJCOPY=$(COMPILER_PREFIX)-objcopy
-SIZE=$(COMPILER_PREFIX)-size
-OBJDUMP=$(COMPILER_PREFIX)-objdump
+CC=gclang
+CPP=gclang++
+OBJCOPY=llvm-objcopy
+SIZE=llvm-size
+OBJDUMP=llvm-objdump
+# CC=$(COMPILER_PREFIX)-gcc
+# CPP=$(COMPILER_PREFIX)-g++
+# OBJCOPY=$(COMPILER_PREFIX)-objcopy
+# SIZE=$(COMPILER_PREFIX)-size
+# OBJDUMP=$(COMPILER_PREFIX)-objdump
 
 # Use gcc in assembler mode so we can use defines etc in assembly
-AS=$(COMPILER_PREFIX)-gcc -x assembler-with-cpp
+AS=arm-none-eabi-gcc -x assembler-with-cpp
+# AS=wllvm -x assembler-with-cpp --target=arm 
+# AS=llvm-as -x assembler-with-cpp
 
 # Linker flags -----------------------------------------------------------------
 LINKER_FLAGS=-Wl,--gc-sections                             \
@@ -396,7 +402,7 @@ LINKER_FLAGS=-Wl,--gc-sections                             \
              -Wl,--undefined=pxCurrentTCB                  \
              -Wl,--defsym=__FLASH_SIZE__=$(flash_size)     \
              -Wl,--defsym=__BOOTLDR_SIZE__=$(bootldr_size) \
-             -Wl,--print-memory-usage                      \
+                                   \
                  --specs=nosys.specs                       \
                  --specs=nano.specs                        \
              $(DEV_LDFLAGS)
@@ -428,6 +434,7 @@ CHECKOPTIONS=-Wtrigraphs                  \
 CHECKOPTIONS_C=$(CHECKOPTIONS) -Wbad-function-cast
 
 CXXFLAGS=$(DEV_CXXFLAGS)        \
+          --target=armv7m-none-eabi \
          $(CPUFLAGS)            \
          $(INCLUDES)            \
          $(GLOBAL_DEFINES)      \
@@ -445,6 +452,7 @@ CXXFLAGS=$(DEV_CXXFLAGS)        \
        -T$(LDSCRIPT)
 
 CFLAGS=$(DEV_CFLAGS)     \
+      --target=armv7m-none-eabi \
        $(CPUFLAGS)       \
        $(INCLUDES)       \
        $(CHECKOPTIONS_C) \

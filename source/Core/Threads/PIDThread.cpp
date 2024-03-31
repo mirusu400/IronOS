@@ -35,7 +35,7 @@ static void    setOutputx10WattsViaFilters(int32_t x10Watts);
 static int32_t getX10WattageLimits();
 
 /* StartPIDTask function */
-void startPIDTask(void const *argument __unused) {
+void startPIDTask(void const *argument) {
   /*
    * We take the current tip temperature & evaluate the next step for the tip
    * control PWM.

@@ -21,7 +21,7 @@
 
 // Small worker thread to handle power (PD + QC) related steps
 
-void startPOWTask(void const *argument __unused) {
+void startPOWTask(void const *argument) {
 
   // Init any other misc sensors
   postRToSInit();

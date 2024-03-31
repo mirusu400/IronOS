@@ -93,9 +93,9 @@ typedef enum {
 } orientationMode_t;
 
 typedef enum {
-  SKIP     = 0, // Skip boot logo
-  ONETIME  = 5, // Show boot logo once (if animated) and stall until a button toggled
-  INFINITY = 6, // Show boot logo on repeat (if animated) until a button toggled
+  SKIP           = 0, // Skip boot logo
+  ONETIME        = 5, // Show boot logo once (if animated) and stall until a button toggled
+  LOGO_INFOINITY = 6, // Show boot logo on repeat (if animated) until a button toggled
 } logoMode_t;
 
 // Settings wide operations

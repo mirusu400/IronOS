@@ -844,7 +844,7 @@ static void displayLogoTime(void) {
   case logoMode_t::ONETIME:
     OLED::drawArea(OLED_WIDTH - 16 - 2, 0, 16, 16, RepeatOnce);
     break;
-  case logoMode_t::INFINITY:
+  case logoMode_t::LOGO_INFOINITY:
     OLED::drawArea(OLED_WIDTH - 16 - 2, 0, 16, 16, RepeatInf);
     break;
   default:

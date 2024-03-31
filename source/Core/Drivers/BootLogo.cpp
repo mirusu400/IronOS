@@ -56,7 +56,7 @@ void BootLogo::showNewFormat(const uint8_t *ptrLogoArea) {
     // 1024 less the header type byte and the inter-frame-delay
     if (getSettingValue(SettingsOptions::LOGOTime) && (position >= 1022 || len == 0)) {
       // Animated logo stops here ...
-      if (getSettingValue(SettingsOptions::LOGOTime) == logoMode_t::INFINITY) {
+      if (getSettingValue(SettingsOptions::LOGOTime) == logoMode_t::LOGO_INFOINITY) {
         // ... but if it's infinite logo setting then keep it rolling over again until a button is pressed
         osDelay(4 * TICKS_100MS);
         OLED::clearScreen();
